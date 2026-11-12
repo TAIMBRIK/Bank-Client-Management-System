@@ -79,6 +79,25 @@ void show_client_list(){
 	}
 	
 }
+bool find_acc(string account_number){
+	vector<info>vx;
+	fstream myfile;
+	myfile.open("Client.txt", ios::in);
+	if (myfile.is_open()) {
+		string line;
+		info c;
+		while (getline(myfile, line)) {
+			c = load_vector_to_client(line);
+			if (c.number == account_number) {
+				myfile.close();
+				return 1;
+			}
+			vx.push_back(c);
+		}
+		myfile.close();
+	}
+	return 0;
+}
 info Add() {
 	cout << "__________________________________________________\n\n";
 	cout << "\t\tadd new client \n ";
@@ -86,6 +105,11 @@ info Add() {
 	info add;
 	cout << "enter the Number:\t";
 	getline(cin >> ws, add.number);
+	while (find_acc(add.number)) {
+		cout << "\nClient with [" << add.number << "]";
+			cout<<"already exists, Enter another Account Number ? " ;
+	getline(cin >> ws, add.number);
+	}
 	cout << "enter the Pincode:\t";
 	getline(cin, add.pincode);
 	cout << "enter the name:\t";
@@ -104,7 +128,7 @@ void add_new_client() {
 	if (myfile.is_open()) {
 		info add = Add();
 		line = convert_to_line(add);
-		myfile << line;
+		myfile << line<<endl;
 	}
 	myfile.close();
 
@@ -136,7 +160,7 @@ void print_info(string s1,info clint) {
 			cout << "Pincode :" << clint.pincode << endl;
 			cout << "Name :" << clint.name << endl;
 			cout << "Phone :" << clint.phone << endl;
-			cout << "Account balanc :" << clint.account_balance;
+			cout << "Account balanc :" << clint.account_balance<<endl;
 		}
 	
 }
