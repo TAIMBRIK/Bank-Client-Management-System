@@ -152,7 +152,7 @@ bool chang_mk(string number, vector<info>& vx) {
 	}
 	return 0;
 }
-void print_info(string s1,info clint) {
+bool print_info(string s1,info clint) {
 
 	
 		if (clint.number == s1) {
@@ -161,6 +161,7 @@ void print_info(string s1,info clint) {
 			cout << "Name :" << clint.name << endl;
 			cout << "Phone :" << clint.phone << endl;
 			cout << "Account balanc :" << clint.account_balance<<endl;
+			return 1;
 		}
 	
 }
@@ -243,6 +244,70 @@ void print_find(vector<info>& vx) {
 		}
 	}
 }
+vector<info>Desposit() {
+	vector<info>vx = read_file();
+	string s1 = reserach();
+	short s2;
+		char s3;
+		for (info& c : vx) {
+			if (print_info(s1, c) == 1) {
+				cout << "Please enter the deposit amount :";
+				cin >> s2;
+				cout << "Are you Sure y/n:";
+				cin >> s3;
+				if (s3 == 'Y' || s3 == 'y') {
+					c.account_balance=c.account_balance + s2;
+					cout << "the new balance is :" << c.account_balance << endl;
+					break;
+				}
+			}
+		}
+		return vx;
+}
+vector<info>Withdrow() {
+	vector<info>vx = read_file();
+	string s1 = reserach();
+	int s2;
+	char s3;
+	for (info& c : vx) {
+		if (print_info(s1, c) == 1) {
+			cout << "Please enter the Withdrow amount :";
+			cin >> s2;
+
+			while (s2 > c.account_balance) {
+				cout << "Amount Exceeds the balance,you can withdrow up to:"<<c.account_balance<<endl;
+				cout << "Please enter anathor amount : ";
+				cin >> s2;
+			}
+			cout << "Are you Sure y/n:";
+			cin >> s3;
+				if (s3 == 'Y' || s3 == 'y') {
+					c.account_balance = c.account_balance - s2;
+					cout << "the new balance is :" << c.account_balance << endl;
+					break;
+				}
+			
+		}
+	}
+	return vx;
+}
+void total_balance() {
+	vector<info>vx = read_file();
+	short sum = 0;
+	cout << "\t\t\tBalnces list (" << vx.size() << ") Client(s).\n";
+	cout << "==========================================================================================\n";
+	cout << left << setw(10) << "| Account number ";
+	cout << left << setw(20) << "| name ";
+	cout << left << setw(30) << "| Account number ";
+	cout << "\n==========================================================================================\n";
+	for (info& c : vx) {
+		cout << left << "| " << setw(15) << c.number << "| " << setw(18) << c.name << "| " << setw(30) << c.account_balance<<endl;
+		sum += c.account_balance;
+	}
+	cout << "\n===========================================================================================\n";
+	cout << endl;
+	cout << "\t\tTotal balance " << sum;
+}
 int main() {
 	short s1=0;
 	
@@ -258,8 +323,10 @@ int main() {
 		cout << "[3]  Delete Client. \n";
 		cout << "[4] Update Client Info.\n";
 		cout << "[5] Find Client Info.\n";
-		cout << "[6] Exit.\n";
+		cout << "[6] transaction\n";
+		cout << "[7] Exit.\n";
 		cout << "_____________________________________________________________________________\n";
+		cout << "Please enter from 1 to 7 :";
 		cin >> s1;
 		switch (s1)
 		{
@@ -267,14 +334,14 @@ int main() {
 		case 1: {
 			system("cls");
 			show_client_list();
-			cout << "press any key to go back to the main menue..."; system("pause> nul");
+			cout << "press any key to go back to the main menue..."; system("pause> 0");
 			break;
 		}
 
 		case 2: {
 			system("cls");
 			add_new_client();
-			cout << "press any key to go back to the main menue..."; system("pause> nul");
+			cout << "press any key to go back to the main menue..."; system("pause> 0");
 			break;
 		}
 
@@ -286,7 +353,7 @@ int main() {
 			cin >> s2;
 			fun_of_delet(s2, vx);
 			cout << "\npress any key to go back to the main menue...";
-			system("pause>nul");
+			system("pause>0");
 			break;
 		}
 
@@ -294,7 +361,7 @@ int main() {
 			system("cls");
 			print_upd();
 			cout << "\npress any key to go back to the main menue...";
-			system("pause>nul");
+			system("pause>0");
 			break;
 		}
 
@@ -303,11 +370,55 @@ int main() {
 			vector < info>vx = read_file();
 			print_find(vx);
 			cout << "\npress any key to go back to the main menue...";
-			system("pause>nul");
+			system("pause>0");
 			break;
 		}
-
 		case 6: {
+			short s2;
+			do {
+				system("cls");
+				cout << "\n_________________________________________________\n";
+				cout << "\tTransaction Main Screen.";
+				cout << "\n_________________________________________________\n";
+				cout << "\t[1] Deposit\n";
+				cout << "\t[2] Withdrow\n";
+				cout << "\t[3]Total balance\n";
+				cout << "\t[4]Main Menue\n";
+				cout << "Please enter from 1 to 4 :";
+			
+				cin >> s2;
+				if (s2 == 1) {
+					system("cls");
+					vector<info>vx = Desposit();
+					vector<info>vxx = save_info(vx);
+					cout << "\n_________________________________________________\n";
+					cout << "\npress any key to go back to the main menue...";
+					system("pause>1");
+				}
+				if (s2 == 2) {
+					system("cls");
+					vector<info>vx = Withdrow();
+					vector<info>vxx = save_info(vx);
+					cout << "\n_________________________________________________\n";
+					cout << "\npress any key to go back to the main menue...";
+					system("pause>1");
+				}
+				if (s2 == 3) {
+					system("cls");
+					total_balance();
+					cout << "\npress any key to go back to the main menue...";
+					system("pause>1");
+				}
+			} while (s2 != 4);
+			
+			if (s2 == 4) {
+				system("cls");
+				show_client_list();
+				cout << "press any key to go back to the main menue..."; system("pause> 1");
+			}
+
+		}
+		case 7: {
 			system("cls");
 			cout << "\n-------------------------------------\n";
 			cout << "_____________________________________\n";
@@ -318,6 +429,6 @@ int main() {
 		}
 		}
 		
-	} while (s1 != 6);
+	} while (s1 != 7);
 	return 0;
 }
